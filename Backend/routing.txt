@@ -1,0 +1,45 @@
+GMB : 
+/GmbCalls -> /Gmb_Inbound
+/GmbCalls/upload -> /Gmb_Inbound/upload
+/GmbCalls/:callId -> /Gmb_Inbound/:callId
+/GmbCalls/analytics -> /Gmb_Inbound/analytics
+
+ABC : 
+/abc-calls -> /abc-outbound-calls
+/abc-calls/upload -> /abc-outbound-calls/upload
+/abc-calls/:callId -> /abc-outbound-calls/:callId
+/abc-calls/analytics -> /abc-outbound-calls/analytics
+
+Outbound (Store Walkin) : 
+
+/outbound-calls -> /storewalkin-outbound-calls
+/outbound-calls/upload -> /storewalkin-outbound-calls/upload
+/outbound-calls/:callId -> /storewalkin-outbound-calls/:callId
+/outbound-calls/analytics -> /storewalkin-outbound-calls/analytics
+
+Video (Popins) : 
+/video-reports -> /popins-inbound
+/video-reports/upload -> /popins-inbound/upload
+/video-reports/:reportId -> /popins-inbound/:reportId
+/video-reports/analytics -> /popins-inbound/analytics
+
+Components Name change 
+1) OutboundAggregatedDashboard.jsx, 
+2) OutboundCallsList.jsx,
+3) OutboundReportDetail.jsx
+, change the names with 
+1 ) StoreWalkinAggregatedDashboard.jsx,
+2) StoreWalkinCallsList.jsx,
+3) StoreWalkinReportDetail.jsx
+
+
+Similarily,
+for the components : 
+1) CallAggregatedDashboard.jsx,
+2) CallReportList.jsx,
+3) CallReportDetail.jsx
+
+, change the names with 
+1) GmbAggregatedDashboard.jsx,  
+2) GmbReportList.jsx,
+3) GmbReportDetail.jsx

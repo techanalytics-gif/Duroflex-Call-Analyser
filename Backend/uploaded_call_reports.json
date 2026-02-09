@@ -1,0 +1,674 @@
+[
+  {
+    "call_id": "CALL_COCO_THRISSUR_03012026_4B531D",
+    "store_name": "COCO THRISSUR",
+    "locality": "MG Road",
+    "city": "Thrissur",
+    "state": "KERALA",
+    "region": "South",
+    "call_date": "03-01-2026",
+    "duration_seconds": 80,
+    "recording_url": "https://recordings.dashloc.com/2026/01/4208/inbound/949699367917674394426958fc52e426e.wav",
+    "analysis": {
+      "MetaData": {
+        "Customer_Name": "Unknown",
+        "Customer_Location": "Thrissur",
+        "Call_Region": "South",
+        "Agent_Name": "Rajesh",
+        "Customer_Language": "Malayalam",
+        "Customer_Gender": "Male",
+        "Customer_Age_Group": "Young Adult",
+        "Consideration_Value": "Below 15k",
+        "Call_Quality_Overall": "High",
+        "Call_Duration": "80 seconds",
+        "Connected_to_Customer": true,
+        "Customer_Enthusiasm": "Low"
+      },
+      "Call_Summary": "A customer called to inquire about the price of a queen-size mattress. The agent, Rajesh, identified the starting price model as Durobond Pro at \u20b913,400 after discount and mentioned its 5-year warranty. The customer was highly transactional, focusing only on the lowest price and warranty details. The agent's attempt to invite the customer to the store was weak and went unanswered, with the customer ending the call after reconfirming the price.",
+      "1_Call_Objective": {
+        "Type": "Sales Call",
+        "Objective_Phrase": "Price inquiry for the cheapest queen-size mattress"
+      },
+      "2_Intent_to_Purchase": {
+        "Rating": "Medium",
+        "Reason": "The customer is actively inquiring about a specific size (queen) and is focused on price, which indicates he is in the market and comparing options. However, the transactional nature of the call suggests he is still in the information-gathering phase."
+      },
+      "2A_Intent_to_Visit": {
+        "Rating": "Low",
+        "Reason": "The customer completely ignored the agent's weak and indirect question about visiting the store ('Sir varunnundo?'). Instead, he re-focused the conversation on the price and then promptly ended the call, showing no immediate intent to visit."
+      },
+      "3_Customer_Experience": {
+        "Rating": "Medium",
+        "Reason": "The agent answered the customer's direct questions accurately. However, the experience was purely functional. There was no attempt to build rapport, understand the customer's needs beyond size, or provide any compelling value proposition for the brand or a store visit."
+      },
+      "4_Funnel_Analysis": {
+        "Stage": "Consideration",
+        "Reason": "The customer has already identified his need (mattress) and the required size ('queen size'). He is now actively comparing options based on price ('What's the lowest price?'), which is a clear indicator of the consideration stage.",
+        "Timeline_to_Purchase": "Short Term (within a week)",
+        "Timeline_to_Purchase_Reasons": [
+          "The customer is making direct calls to gather specific pricing information, a common behavior for someone planning to make a purchase soon."
+        ]
+      },
+      "5_Product_Intelligence": {
+        "Narrow_Down_Stage": "Category",
+        "Product_of_Interest": "Durobond Pro (entry-level model)",
+        "Approx_Order_Value": "13400"
+      },
+      "6_Customer_Needs": {
+        "Description": "The customer's stated need is a queen-size mattress at the lowest possible price point. He did not volunteer any information regarding the user, comfort preferences, or any medical conditions. The inquiry was entirely price-driven."
+      },
+      "7_Purchase_Barrier": "Price",
+      "8_Decision_Maker": "Unknown",
+      "9_Invitations": {
+        "Store_Visit": {
+          "Rating": "Low",
+          "Reason": "The agent's invitation was a single, low-confidence question ('Sir, are you coming?') that was easily ignored by the customer. It lacked any compelling reason, such as experiencing the product's comfort firsthand."
+        },
+        "Video_Demo": {
+          "Rating": "Low",
+          "Reason": "A video demo was not offered by the agent."
+        }
+      },
+      "10_Conversion_Hooks": {
+        "Offers_Discounts_EMI": {
+          "Status": "Yes",
+          "Comment": "Agent mentioned the price of \u20b913,400 was 'after discount'."
+        },
+        "Product_Brochure": {
+          "Status": "No",
+          "Comment": "Not offered."
+        },
+        "Mattress_Measurement": {
+          "Status": "No",
+          "Comment": "Not offered."
+        },
+        "Brand_Legacy_Warranty": {
+          "Status": "Yes",
+          "Comment": "Agent mentioned a 5-year warranty for the product."
+        },
+        "Sleep_Trial": {
+          "Status": "No",
+          "Comment": "Agent did not invite the customer to try or test the mattress in the store."
+        }
+      },
+      "11_RELAX_Framework": {
+        "R_Reach_Out": {
+          "Score": "H",
+          "Reason": "Agent started the call with a professional greeting, stated the brand name ('Duroflex Experience Center'), and introduced himself."
+        },
+        "E_Explore_Needs": {
+          "Score": "L",
+          "Reason": "The agent made no attempt to discover the customer's underlying needs. After the customer specified the size, the agent listed mattress types but didn't probe for comfort requirements, user profile, or health concerns."
+        },
+        "L_Link_Product": {
+          "Score": "M",
+          "Reason": "The agent successfully linked the customer's request for the 'lowest price' to a specific product (Durobond Pro) and provided its details. However, he did not explain its benefits or why it might be a good choice."
+        },
+        "A_Add_Value": {
+          "Score": "L",
+          "Reason": "The only value added was mentioning the discount and warranty. There was no effort to highlight the in-store experience, unique product features, or other brand benefits."
+        },
+        "X_Express_Closing": {
+          "Score": "L",
+          "Reason": "The closing was extremely weak. The agent asked a vague, non-committal question about a store visit which was ignored. He did not attempt to get contact details, share the location, or establish any clear next step."
+        }
+      },
+      "12_Agent_Evaluation": {
+        "Main_Skills": {
+          "Product_Knowledge": "Medium",
+          "Product_Knowledge_Reason": "The agent knew the entry-level product, its price, thickness, and warranty details. His knowledge seemed sufficient for the direct questions asked.",
+          "Sales_Skills": "Low",
+          "Sales_Skills_Reason": "The agent was entirely reactive and acted as an information provider rather than a salesperson. He failed to control the conversation, build value, or create a reason for the customer to engage further.",
+          "Upsell_Revenue_Skills": "Low",
+          "Upsell_Revenue_Skills_Reason": "There was no attempt to upsell. When asked for the cheapest option, he provided it without trying to introduce a better alternative or explain the value of a higher-priced model."
+        },
+        "Secondary_Traits": {
+          "Need_Discovery": "Low",
+          "Need_Discovery_Reason": "The agent did not ask any probing questions to understand the customer's actual requirements beyond size and price.",
+          "Objection_Handling": "Low",
+          "Objection_Handling_Reason": "The customer did not raise any objections, so this skill was not tested. The rating reflects a lack of opportunity to demonstrate it.",
+          "Agent_Nature": "Passive",
+          "Agent_Nature_Reason": "The agent followed the customer's lead throughout the call, answering direct questions without taking any initiative to guide the conversation towards a sale or a store visit."
+        }
+      },
+      "13_Agent_Learnings": [
+        "For price-focused inquiries, acknowledge the request but also pivot to value. For example: 'Our starting range is \u20b913,400. For whom is the mattress intended? I can ensure it's the right fit for them.'",
+        "The invitation to the store must be a confident call to action, not a passive question. Try: 'The best way to know if a mattress is right is to try it. We have this model on display. When can you visit us to experience it?'",
+        "Always attempt to establish a next step before the customer hangs up, such as offering to send the store location or product details via WhatsApp."
+      ],
+      "14_Next_Actions": "Save the customer's number and send a follow-up WhatsApp message with the store location and details of the Durobond Pro mattress.",
+      "15_End_to_End_NPS": {
+        "Score": 5,
+        "Comment": "The interaction was neutral and forgettable. The customer received the basic information requested but was given no reason to feel positive or enthusiastic about the brand or the store. It was a missed opportunity to create a good impression."
+      },
+      "Transcript_Log": "[Agent](0:00): Greetings, you've called the Duroflex Experience Center. This is Rajesh speaking.\n[Customer](0:04): What's the rate for a double bed?\n[Agent](0:08): For a double bed, which model are you looking for, sir?\n[Customer](0:11): I want a queen size.\n[Agent](0:14): Sir, double size is 6 by 4. Queen size is 6.25 by 5.\n[Customer](0:20): Yes, queen size is what I want. What I'm looking for. I want to know approximately how much it costs.\n[Agent](0:26): I understand. In Duroflex, there are many types... there are spring mattresses, orthopedic mattresses, latex mattresses, and ones in the premium range. I am asking which of these models you want, sir.\n[Customer](0:37): What's the lowest price?\n[Agent](0:39): The lowest one we have is a model that comes to about thirteen thousand four hundred rupees after discount. It's a 5-inch thick product called Durobond Pro.\n[Customer](0:45): Ah.\n[Customer](0:47): Thirteen... thirteen thousand four hundred, right?\n[Agent](0:49): Four hundred, yes.\n[Customer](0:51): How many years warranty do you give for that?\n[Agent](0:54): It has a 5-year warranty. If any complaint comes within one year, it can be replaced. After one year, the remaining cash will be refunded after depreciation.\n[Customer](1:02): Oh, okay okay okay. Ah, okay. Thank you.\n[Agent](1:05): Sir, are you coming?\n[Customer](1:07): Hmm?\n[Customer](1:08): Offer... offer rate... thirteen thousand five hundred?\n[Agent](1:12): Thirteen thousand four hundred. Yes. I am telling you the rate after the offer, thirteen thousand four hundred.\n[Customer](1:15): Okay. Okay, thank you.\n[Agent](1:17): Okay."
+    },
+    "flattened_data": {
+      "MetaData_Customer_Name": "Unknown",
+      "MetaData_Customer_Location": "Thrissur",
+      "MetaData_Call_Region": "South",
+      "MetaData_Agent_Name": "Rajesh",
+      "MetaData_Customer_Language": "Malayalam",
+      "MetaData_Customer_Gender": "Male",
+      "MetaData_Customer_Age_Group": "Young Adult",
+      "MetaData_Consideration_Value": "Below 15k",
+      "MetaData_Call_Quality_Overall": "High",
+      "MetaData_Call_Duration": "80 seconds",
+      "MetaData_Connected_to_Customer": true,
+      "MetaData_Customer_Enthusiasm": "Low",
+      "Call_Summary": "A customer called to inquire about the price of a queen-size mattress. The agent, Rajesh, identified the starting price model as Durobond Pro at \u20b913,400 after discount and mentioned its 5-year warranty. The customer was highly transactional, focusing only on the lowest price and warranty details. The agent's attempt to invite the customer to the store was weak and went unanswered, with the customer ending the call after reconfirming the price.",
+      "1_Call_Objective_Type": "Sales Call",
+      "1_Call_Objective_Objective_Phrase": "Price inquiry for the cheapest queen-size mattress",
+      "2_Intent_to_Purchase_Rating": "Medium",
+      "2_Intent_to_Purchase_Reason": "The customer is actively inquiring about a specific size (queen) and is focused on price, which indicates he is in the market and comparing options. However, the transactional nature of the call suggests he is still in the information-gathering phase.",
+      "2A_Intent_to_Visit_Rating": "Low",
+      "2A_Intent_to_Visit_Reason": "The customer completely ignored the agent's weak and indirect question about visiting the store ('Sir varunnundo?'). Instead, he re-focused the conversation on the price and then promptly ended the call, showing no immediate intent to visit.",
+      "3_Customer_Experience_Rating": "Medium",
+      "3_Customer_Experience_Reason": "The agent answered the customer's direct questions accurately. However, the experience was purely functional. There was no attempt to build rapport, understand the customer's needs beyond size, or provide any compelling value proposition for the brand or a store visit.",
+      "4_Funnel_Analysis_Stage": "Consideration",
+      "4_Funnel_Analysis_Reason": "The customer has already identified his need (mattress) and the required size ('queen size'). He is now actively comparing options based on price ('What's the lowest price?'), which is a clear indicator of the consideration stage.",
+      "4_Funnel_Analysis_Timeline_to_Purchase": "Short Term (within a week)",
+      "4_Funnel_Analysis_Timeline_to_Purchase_Reasons_1": "The customer is making direct calls to gather specific pricing information, a common behavior for someone planning to make a purchase soon.",
+      "4_Funnel_Analysis_Timeline_to_Purchase_Reasons_count": 1,
+      "5_Product_Intelligence_Narrow_Down_Stage": "Category",
+      "5_Product_Intelligence_Product_of_Interest": "Durobond Pro (entry-level model)",
+      "5_Product_Intelligence_Approx_Order_Value": "13400",
+      "6_Customer_Needs_Description": "The customer's stated need is a queen-size mattress at the lowest possible price point. He did not volunteer any information regarding the user, comfort preferences, or any medical conditions. The inquiry was entirely price-driven.",
+      "7_Purchase_Barrier": "Price",
+      "8_Decision_Maker": "Unknown",
+      "9_Invitations_Store_Visit_Rating": "Low",
+      "9_Invitations_Store_Visit_Reason": "The agent's invitation was a single, low-confidence question ('Sir, are you coming?') that was easily ignored by the customer. It lacked any compelling reason, such as experiencing the product's comfort firsthand.",
+      "9_Invitations_Video_Demo_Rating": "Low",
+      "9_Invitations_Video_Demo_Reason": "A video demo was not offered by the agent.",
+      "10_Conversion_Hooks_Offers_Discounts_EMI_Status": "Yes",
+      "10_Conversion_Hooks_Offers_Discounts_EMI_Comment": "Agent mentioned the price of \u20b913,400 was 'after discount'.",
+      "10_Conversion_Hooks_Product_Brochure_Status": "No",
+      "10_Conversion_Hooks_Product_Brochure_Comment": "Not offered.",
+      "10_Conversion_Hooks_Mattress_Measurement_Status": "No",
+      "10_Conversion_Hooks_Mattress_Measurement_Comment": "Not offered.",
+      "10_Conversion_Hooks_Brand_Legacy_Warranty_Status": "Yes",
+      "10_Conversion_Hooks_Brand_Legacy_Warranty_Comment": "Agent mentioned a 5-year warranty for the product.",
+      "10_Conversion_Hooks_Sleep_Trial_Status": "No",
+      "10_Conversion_Hooks_Sleep_Trial_Comment": "Agent did not invite the customer to try or test the mattress in the store.",
+      "11_RELAX_Framework_R_Reach_Out_Score": "H",
+      "11_RELAX_Framework_R_Reach_Out_Reason": "Agent started the call with a professional greeting, stated the brand name ('Duroflex Experience Center'), and introduced himself.",
+      "11_RELAX_Framework_E_Explore_Needs_Score": "L",
+      "11_RELAX_Framework_E_Explore_Needs_Reason": "The agent made no attempt to discover the customer's underlying needs. After the customer specified the size, the agent listed mattress types but didn't probe for comfort requirements, user profile, or health concerns.",
+      "11_RELAX_Framework_L_Link_Product_Score": "M",
+      "11_RELAX_Framework_L_Link_Product_Reason": "The agent successfully linked the customer's request for the 'lowest price' to a specific product (Durobond Pro) and provided its details. However, he did not explain its benefits or why it might be a good choice.",
+      "11_RELAX_Framework_A_Add_Value_Score": "L",
+      "11_RELAX_Framework_A_Add_Value_Reason": "The only value added was mentioning the discount and warranty. There was no effort to highlight the in-store experience, unique product features, or other brand benefits.",
+      "11_RELAX_Framework_X_Express_Closing_Score": "L",
+      "11_RELAX_Framework_X_Express_Closing_Reason": "The closing was extremely weak. The agent asked a vague, non-committal question about a store visit which was ignored. He did not attempt to get contact details, share the location, or establish any clear next step.",
+      "12_Agent_Evaluation_Main_Skills_Product_Knowledge": "Medium",
+      "12_Agent_Evaluation_Main_Skills_Product_Knowledge_Reason": "The agent knew the entry-level product, its price, thickness, and warranty details. His knowledge seemed sufficient for the direct questions asked.",
+      "12_Agent_Evaluation_Main_Skills_Sales_Skills": "Low",
+      "12_Agent_Evaluation_Main_Skills_Sales_Skills_Reason": "The agent was entirely reactive and acted as an information provider rather than a salesperson. He failed to control the conversation, build value, or create a reason for the customer to engage further.",
+      "12_Agent_Evaluation_Main_Skills_Upsell_Revenue_Skills": "Low",
+      "12_Agent_Evaluation_Main_Skills_Upsell_Revenue_Skills_Reason": "There was no attempt to upsell. When asked for the cheapest option, he provided it without trying to introduce a better alternative or explain the value of a higher-priced model.",
+      "12_Agent_Evaluation_Secondary_Traits_Need_Discovery": "Low",
+      "12_Agent_Evaluation_Secondary_Traits_Need_Discovery_Reason": "The agent did not ask any probing questions to understand the customer's actual requirements beyond size and price.",
+      "12_Agent_Evaluation_Secondary_Traits_Objection_Handling": "Low",
+      "12_Agent_Evaluation_Secondary_Traits_Objection_Handling_Reason": "The customer did not raise any objections, so this skill was not tested. The rating reflects a lack of opportunity to demonstrate it.",
+      "12_Agent_Evaluation_Secondary_Traits_Agent_Nature": "Passive",
+      "12_Agent_Evaluation_Secondary_Traits_Agent_Nature_Reason": "The agent followed the customer's lead throughout the call, answering direct questions without taking any initiative to guide the conversation towards a sale or a store visit.",
+      "13_Agent_Learnings_1": "For price-focused inquiries, acknowledge the request but also pivot to value. For example: 'Our starting range is \u20b913,400. For whom is the mattress intended? I can ensure it's the right fit for them.'",
+      "13_Agent_Learnings_2": "The invitation to the store must be a confident call to action, not a passive question. Try: 'The best way to know if a mattress is right is to try it. We have this model on display. When can you visit us to experience it?'",
+      "13_Agent_Learnings_3": "Always attempt to establish a next step before the customer hangs up, such as offering to send the store location or product details via WhatsApp.",
+      "13_Agent_Learnings_count": 3,
+      "14_Next_Actions": "Save the customer's number and send a follow-up WhatsApp message with the store location and details of the Durobond Pro mattress.",
+      "15_End_to_End_NPS_Score": 5,
+      "15_End_to_End_NPS_Comment": "The interaction was neutral and forgettable. The customer received the basic information requested but was given no reason to feel positive or enthusiastic about the brand or the store. It was a missed opportunity to create a good impression.",
+      "Transcript_Log_count": 0
+    },
+    "upload_timestamp": "2026-02-06T16:47:32.265724"
+  },
+  {
+    "call_id": "CALL_COCO_WHITEFIELD_23012026_C9B25B",
+    "store_name": "COCO WHITEFIELD",
+    "locality": "Varthur Road Whitefield",
+    "city": "Bengaluru",
+    "state": "KARNATAKA",
+    "region": "South",
+    "call_date": "23-01-2026",
+    "duration_seconds": 157,
+    "recording_url": "https://recordings.dashloc.com/2026/01/4208/inbound/8105739898176914745169730c3b4b1a4.wav",
+    "analysis": {
+      "MetaData": {
+        "Customer_Name": "Unknown",
+        "Customer_Location": "Bengaluru",
+        "Call_Region": "South",
+        "Agent_Name": "Unknown",
+        "Customer_Language": "English, Hindi",
+        "Customer_Gender": "Male",
+        "Customer_Age_Group": "Middle Aged",
+        "Consideration_Value": "25k-50k",
+        "Call_Quality_Overall": "Medium",
+        "Call_Duration": "2 minutes 37 seconds",
+        "Connected_to_Customer": true,
+        "Customer_Enthusiasm": "Medium"
+      },
+      "Call_Summary": "A customer called to inquire about the Duroflex 'Back Magic' mattress in a king size. The agent confirmed availability, clarified the 6-inch standard and 8-inch 'Pro Plus' variants, and provided a detailed price breakdown, quoting a final price of \u20b925,055 after a store discount. The agent also explained an HDFC no-cost EMI offer. The customer confirmed he could order online and stated he would confirm his decision later.",
+      "1_Call_Objective": {
+        "Type": "Sales Call",
+        "Objective_Phrase": "Product and price inquiry for Back Magic mattress"
+      },
+      "2_Intent_to_Purchase": {
+        "Rating": "High",
+        "Reason": "The customer is in a late-stage buying cycle. He knew the specific product name ('Back Magic'), the size he needed (King size, 78x72), and was focused on final details like price, offers, and delivery time."
+      },
+      "2A_Intent_to_Visit": {
+        "Rating": "Low",
+        "Reason": "The customer explicitly asked if he could order online instead of visiting the store, indicating a preference for a remote purchase. The agent did not provide any compelling reason to visit."
+      },
+      "3_Customer_Experience": {
+        "Rating": "High",
+        "Reason": "The agent was efficient and directly answered all of the customer's questions regarding product variants, pricing, offers, and delivery. The interaction was quick and fulfilled the customer's informational needs."
+      },
+      "4_Funnel_Analysis": {
+        "Stage": "Action",
+        "Reason": "The customer has already moved past awareness and consideration. He has a specific product (Back Magic) and size in mind and is now taking action by comparing final prices and purchase options.",
+        "Timeline_to_Purchase": "Short Term (within a week)",
+        "Timeline_to_Purchase_Reasons": [
+          "The customer is gathering final decision-making information like the best price and delivery timelines, which typically precedes an imminent purchase."
+        ]
+      },
+      "5_Product_Intelligence": {
+        "Narrow_Down_Stage": "Specific SKU",
+        "Product_of_Interest": "Duroflex Back Magic",
+        "Approx_Order_Value": "\u20b925,055"
+      },
+      "6_Customer_Needs": {
+        "Description": "The customer requires a Duroflex Back Magic mattress in King size (78x72). He is primarily focused on the 6-inch model and is seeking the best possible price, inquiring about store discounts and credit card offers to finalize his purchase decision."
+      },
+      "7_Purchase_Barrier": "Price",
+      "8_Decision_Maker": "Unknown",
+      "9_Invitations": {
+        "Store_Visit": {
+          "Rating": "Low",
+          "Reason": "The agent did not invite the customer to the store to experience the product. He only confirmed that an online order was possible when asked by the customer."
+        },
+        "Video_Demo": {
+          "Rating": "Low",
+          "Reason": "A video demo was not offered or mentioned during the call."
+        }
+      },
+      "10_Conversion_Hooks": {
+        "Offers_Discounts_EMI": {
+          "Status": "Yes",
+          "Comment": "Agent detailed a store discount and an HDFC no-cost EMI offer with an additional 5% instant discount."
+        },
+        "Product_Brochure": {
+          "Status": "No",
+          "Comment": "A product brochure was not offered."
+        },
+        "Mattress_Measurement": {
+          "Status": "No",
+          "Comment": "Not applicable as the customer provided the exact dimensions."
+        },
+        "Brand_Legacy_Warranty": {
+          "Status": "No",
+          "Comment": "Warranty or brand legacy was not mentioned by the agent."
+        },
+        "Sleep_Trial": {
+          "Status": "No",
+          "Comment": "The agent did not invite the customer to the store to try or test the mattress."
+        }
+      },
+      "11_RELAX_Framework": {
+        "R_Reach_Out": {
+          "Score": "H",
+          "Reason": "The agent answered professionally, stating the brand and location: 'Duroflex Experience Center, Whitefield'."
+        },
+        "E_Explore_Needs": {
+          "Score": "M",
+          "Reason": "The agent asked for the mattress size but did not probe deeper to understand the customer's specific comfort or health needs."
+        },
+        "L_Link_Product": {
+          "Score": "H",
+          "Reason": "The agent effectively confirmed the product the customer asked for and provided accurate pricing and variant information."
+        },
+        "A_Add_Value": {
+          "Score": "H",
+          "Reason": "The agent clearly communicated multiple layers of discounts (standard discount, store discount) and an additional credit card EMI offer."
+        },
+        "X_Express_Closing": {
+          "Score": "L",
+          "Reason": "The agent made no attempt to close the sale or define a clear next step. When the customer said he would confirm, the agent passively agreed without trying to capture contact details or send information."
+        }
+      },
+      "12_Agent_Evaluation": {
+        "Main_Skills": {
+          "Product_Knowledge": "High",
+          "Product_Knowledge_Reason": "The agent knew the product variants (6-inch vs 8-inch Pro Plus), pricing, and available offers without any hesitation.",
+          "Sales_Skills": "Low",
+          "Sales_Skills_Reason": "The agent was purely transactional. He did not build rapport, create urgency, or attempt to close the sale, acting more like an information provider than a salesperson.",
+          "Upsell_Revenue_Skills": "Low",
+          "Upsell_Revenue_Skills_Reason": "He mentioned the more premium 'Pro Plus' model but did not explain its benefits or make any attempt to upsell the customer to it."
+        },
+        "Secondary_Traits": {
+          "Need_Discovery": "Low",
+          "Need_Discovery_Reason": "The agent did not ask any questions to uncover the customer's underlying needs, such as sleep problems or user profile.",
+          "Objection_Handling": "Low",
+          "Objection_Handling_Reason": "The customer did not raise any objections, so this skill was not tested.",
+          "Agent_Nature": "Passive",
+          "Agent_Nature_Reason": "The agent waited for the customer to lead the conversation and ask all the questions, rather than proactively guiding the call towards a sale."
+        }
+      },
+      "13_Agent_Learnings": [
+        "Proactively ask discovery questions like 'Who is the mattress for?' to better understand customer needs and build rapport.",
+        "When a customer says 'I will confirm,' attempt a soft close by offering to send the quote and product details via WhatsApp to capture their number and keep the engagement alive.",
+        "When mentioning a premium alternative like the 'Pro Plus' model, briefly state its key benefit to create an upsell opportunity."
+      ],
+      "14_Next_Actions": "Save the customer's number and send a WhatsApp message containing the final price quote for the King Size Back Magic mattress, a payment link, and the store location.",
+      "15_End_to_End_NPS": {
+        "Score": 7,
+        "Comment": "The experience was efficient and informative, which is positive. However, the agent's passive, transactional approach missed the opportunity to build a stronger connection or create a compelling reason to buy, making the interaction neutral rather than delightful."
+      },
+      "Transcript_Log": "[Agent](0:00): Duroflex Experience Center, Whitefield.\n[Customer](0:03): Hello?\n[Customer](0:04): Uh, ye Duroflex center hai?\n[Agent](0:08): Yes sir.\n[Customer](0:09): Do you have Back Magic this mattress?\n[Agent](0:14): Yes yes, we have.\n[Customer](0:16): You have. Uh, and it comes in 6 inches only or other sizes are available?\n[Agent](0:21): Only 6 inches, sir.\n[Customer](0:23): 6 inches. King size, right?\n[Agent](0:26): Back Magic, Back Magic 6 inches, sir. Back Magic Pro Plus 8 inches.\n[Customer](0:31): Okay, okay. Back Magic is 6 and then Pro Plus is 8.\n[Customer](0:35): Okay. And any offer is going on that one?\n[Agent](0:39): What size are you looking for, sir?\n[Customer](0:41): Uh, King size. Uh, 9 by 9... uh sorry, 78 by 72.\n[Agent](0:48): Yeah, 78 by 72, correct.\n[Agent](0:51): See, uh, its MRP is 31,000, sir.\n[Customer](0:56): Okay.\n[Agent](0:57): After discount 26,941.\n[Customer](1:01): Okay.\n[Agent](1:02): And we'll give like store discount also. We'll give after store discount, you'll get 25,055 rupees.\n[Customer](1:10): Which... store discount? How much is after that?\n[Agent](1:15): 25,055 rupees.\n[Customer](1:18): 25,055 is after store discount.\n[Agent](1:21): After store discount, yes sir.\n[Customer](1:23): And and some credit card offers?\n[Agent](1:26): You have HDFC credit card, sir?\n[Customer](1:28): HDFC I don't have, I have Axis card.\n[Agent](1:33): Only HDFC credit card, but only no-cost EMI.\n[Customer](1:37): HDFC credit card no-cost EMI only has offer.\n[Agent](1:40): No-cost EMI, you can no-cost EMI, you can go for no-cost EMI, you'll get additional instant 5% off. Three months, six months EMI.\n[Customer](1:49): Understood. But otherwise 25,055 is the final, na? Final price?\n[Agent](1:54): Yes sir, yes.\n[Customer](1:56): And delivery is how many days?\n[Agent](1:58): Two to three days.\n[Customer](2:01): Two to three days. Okay, okay.\n[Customer](2:07): Okay. Uh, so we have to come to the store, right? We can make online order also?\n[Agent](2:13): You can make online also. You can tell me your address and I'll send you payment link.\n[Customer](2:19): Okay, okay. Understood. Okay, so online also it can be. And it's in two colors, right? Blue, blue one and...\n[Agent](2:26): Blue and, blue and white, yes sir.\n[Customer](2:28): Blue and white. Okay.\n[Customer](2:31): Okay, okay. I will confirm. Okay, fine.\n[Agent](2:34): Okay sir.\n[Customer](2:36): What is the WhatsApp...?"
+    },
+    "flattened_data": {
+      "MetaData_Customer_Name": "Unknown",
+      "MetaData_Customer_Location": "Bengaluru",
+      "MetaData_Call_Region": "South",
+      "MetaData_Agent_Name": "Unknown",
+      "MetaData_Customer_Language": "English, Hindi",
+      "MetaData_Customer_Gender": "Male",
+      "MetaData_Customer_Age_Group": "Middle Aged",
+      "MetaData_Consideration_Value": "25k-50k",
+      "MetaData_Call_Quality_Overall": "Medium",
+      "MetaData_Call_Duration": "2 minutes 37 seconds",
+      "MetaData_Connected_to_Customer": true,
+      "MetaData_Customer_Enthusiasm": "Medium",
+      "Call_Summary": "A customer called to inquire about the Duroflex 'Back Magic' mattress in a king size. The agent confirmed availability, clarified the 6-inch standard and 8-inch 'Pro Plus' variants, and provided a detailed price breakdown, quoting a final price of \u20b925,055 after a store discount. The agent also explained an HDFC no-cost EMI offer. The customer confirmed he could order online and stated he would confirm his decision later.",
+      "1_Call_Objective_Type": "Sales Call",
+      "1_Call_Objective_Objective_Phrase": "Product and price inquiry for Back Magic mattress",
+      "2_Intent_to_Purchase_Rating": "High",
+      "2_Intent_to_Purchase_Reason": "The customer is in a late-stage buying cycle. He knew the specific product name ('Back Magic'), the size he needed (King size, 78x72), and was focused on final details like price, offers, and delivery time.",
+      "2A_Intent_to_Visit_Rating": "Low",
+      "2A_Intent_to_Visit_Reason": "The customer explicitly asked if he could order online instead of visiting the store, indicating a preference for a remote purchase. The agent did not provide any compelling reason to visit.",
+      "3_Customer_Experience_Rating": "High",
+      "3_Customer_Experience_Reason": "The agent was efficient and directly answered all of the customer's questions regarding product variants, pricing, offers, and delivery. The interaction was quick and fulfilled the customer's informational needs.",
+      "4_Funnel_Analysis_Stage": "Action",
+      "4_Funnel_Analysis_Reason": "The customer has already moved past awareness and consideration. He has a specific product (Back Magic) and size in mind and is now taking action by comparing final prices and purchase options.",
+      "4_Funnel_Analysis_Timeline_to_Purchase": "Short Term (within a week)",
+      "4_Funnel_Analysis_Timeline_to_Purchase_Reasons_1": "The customer is gathering final decision-making information like the best price and delivery timelines, which typically precedes an imminent purchase.",
+      "4_Funnel_Analysis_Timeline_to_Purchase_Reasons_count": 1,
+      "5_Product_Intelligence_Narrow_Down_Stage": "Specific SKU",
+      "5_Product_Intelligence_Product_of_Interest": "Duroflex Back Magic",
+      "5_Product_Intelligence_Approx_Order_Value": "\u20b925,055",
+      "6_Customer_Needs_Description": "The customer requires a Duroflex Back Magic mattress in King size (78x72). He is primarily focused on the 6-inch model and is seeking the best possible price, inquiring about store discounts and credit card offers to finalize his purchase decision.",
+      "7_Purchase_Barrier": "Price",
+      "8_Decision_Maker": "Unknown",
+      "9_Invitations_Store_Visit_Rating": "Low",
+      "9_Invitations_Store_Visit_Reason": "The agent did not invite the customer to the store to experience the product. He only confirmed that an online order was possible when asked by the customer.",
+      "9_Invitations_Video_Demo_Rating": "Low",
+      "9_Invitations_Video_Demo_Reason": "A video demo was not offered or mentioned during the call.",
+      "10_Conversion_Hooks_Offers_Discounts_EMI_Status": "Yes",
+      "10_Conversion_Hooks_Offers_Discounts_EMI_Comment": "Agent detailed a store discount and an HDFC no-cost EMI offer with an additional 5% instant discount.",
+      "10_Conversion_Hooks_Product_Brochure_Status": "No",
+      "10_Conversion_Hooks_Product_Brochure_Comment": "A product brochure was not offered.",
+      "10_Conversion_Hooks_Mattress_Measurement_Status": "No",
+      "10_Conversion_Hooks_Mattress_Measurement_Comment": "Not applicable as the customer provided the exact dimensions.",
+      "10_Conversion_Hooks_Brand_Legacy_Warranty_Status": "No",
+      "10_Conversion_Hooks_Brand_Legacy_Warranty_Comment": "Warranty or brand legacy was not mentioned by the agent.",
+      "10_Conversion_Hooks_Sleep_Trial_Status": "No",
+      "10_Conversion_Hooks_Sleep_Trial_Comment": "The agent did not invite the customer to the store to try or test the mattress.",
+      "11_RELAX_Framework_R_Reach_Out_Score": "H",
+      "11_RELAX_Framework_R_Reach_Out_Reason": "The agent answered professionally, stating the brand and location: 'Duroflex Experience Center, Whitefield'.",
+      "11_RELAX_Framework_E_Explore_Needs_Score": "M",
+      "11_RELAX_Framework_E_Explore_Needs_Reason": "The agent asked for the mattress size but did not probe deeper to understand the customer's specific comfort or health needs.",
+      "11_RELAX_Framework_L_Link_Product_Score": "H",
+      "11_RELAX_Framework_L_Link_Product_Reason": "The agent effectively confirmed the product the customer asked for and provided accurate pricing and variant information.",
+      "11_RELAX_Framework_A_Add_Value_Score": "H",
+      "11_RELAX_Framework_A_Add_Value_Reason": "The agent clearly communicated multiple layers of discounts (standard discount, store discount) and an additional credit card EMI offer.",
+      "11_RELAX_Framework_X_Express_Closing_Score": "L",
+      "11_RELAX_Framework_X_Express_Closing_Reason": "The agent made no attempt to close the sale or define a clear next step. When the customer said he would confirm, the agent passively agreed without trying to capture contact details or send information.",
+      "12_Agent_Evaluation_Main_Skills_Product_Knowledge": "High",
+      "12_Agent_Evaluation_Main_Skills_Product_Knowledge_Reason": "The agent knew the product variants (6-inch vs 8-inch Pro Plus), pricing, and available offers without any hesitation.",
+      "12_Agent_Evaluation_Main_Skills_Sales_Skills": "Low",
+      "12_Agent_Evaluation_Main_Skills_Sales_Skills_Reason": "The agent was purely transactional. He did not build rapport, create urgency, or attempt to close the sale, acting more like an information provider than a salesperson.",
+      "12_Agent_Evaluation_Main_Skills_Upsell_Revenue_Skills": "Low",
+      "12_Agent_Evaluation_Main_Skills_Upsell_Revenue_Skills_Reason": "He mentioned the more premium 'Pro Plus' model but did not explain its benefits or make any attempt to upsell the customer to it.",
+      "12_Agent_Evaluation_Secondary_Traits_Need_Discovery": "Low",
+      "12_Agent_Evaluation_Secondary_Traits_Need_Discovery_Reason": "The agent did not ask any questions to uncover the customer's underlying needs, such as sleep problems or user profile.",
+      "12_Agent_Evaluation_Secondary_Traits_Objection_Handling": "Low",
+      "12_Agent_Evaluation_Secondary_Traits_Objection_Handling_Reason": "The customer did not raise any objections, so this skill was not tested.",
+      "12_Agent_Evaluation_Secondary_Traits_Agent_Nature": "Passive",
+      "12_Agent_Evaluation_Secondary_Traits_Agent_Nature_Reason": "The agent waited for the customer to lead the conversation and ask all the questions, rather than proactively guiding the call towards a sale.",
+      "13_Agent_Learnings_1": "Proactively ask discovery questions like 'Who is the mattress for?' to better understand customer needs and build rapport.",
+      "13_Agent_Learnings_2": "When a customer says 'I will confirm,' attempt a soft close by offering to send the quote and product details via WhatsApp to capture their number and keep the engagement alive.",
+      "13_Agent_Learnings_3": "When mentioning a premium alternative like the 'Pro Plus' model, briefly state its key benefit to create an upsell opportunity.",
+      "13_Agent_Learnings_count": 3,
+      "14_Next_Actions": "Save the customer's number and send a WhatsApp message containing the final price quote for the King Size Back Magic mattress, a payment link, and the store location.",
+      "15_End_to_End_NPS_Score": 7,
+      "15_End_to_End_NPS_Comment": "The experience was efficient and informative, which is positive. However, the agent's passive, transactional approach missed the opportunity to build a stronger connection or create a compelling reason to buy, making the interaction neutral rather than delightful.",
+      "Transcript_Log_count": 0
+    },
+    "upload_timestamp": "2026-02-06T16:48:46.360733"
+  },
+  {
+    "call_id": "CALL_COCO_WHITEFIELD_23012026_517A54",
+    "store_name": "COCO WHITEFIELD",
+    "locality": "Varthur Road Whitefield",
+    "city": "Bengaluru",
+    "state": "KARNATAKA",
+    "region": "South",
+    "call_date": "23-01-2026",
+    "duration_seconds": 18,
+    "recording_url": "https://recordings.dashloc.com/2026/01/4208/inbound/9772521177176917668469737e6c088d2.wav",
+    "analysis": {
+      "MetaData": {
+        "Customer_Name": "Unknown",
+        "Customer_Location": "Unknown",
+        "Call_Region": "South",
+        "Agent_Name": "NA",
+        "Customer_Language": "NA",
+        "Customer_Gender": "Unknown",
+        "Customer_Age_Group": "Unknown",
+        "Consideration_Value": "NA",
+        "Call_Quality_Overall": "High",
+        "Call_Duration": "18",
+        "Connected_to_Customer": false,
+        "Customer_Enthusiasm": "Low"
+      },
+      "Call_Summary": "This was a missed opportunity. The call was never answered by the store agent. The phone rang for the entire duration of the 18-second call, and the customer eventually disconnected. No conversation took place, resulting in a lost lead.",
+      "1_Call_Objective": {
+        "Type": "Sales Call",
+        "Objective_Phrase": "Unanswered Call"
+      },
+      "2_Intent_to_Purchase": {
+        "Rating": "Unknown",
+        "Reason": "The call was not answered, so the customer's intent could not be determined."
+      },
+      "2A_Intent_to_Visit": {
+        "Rating": "Low",
+        "Reason": "A customer's intent to visit drops significantly when their initial attempt to contact the store is ignored. The lack of response creates a major barrier."
+      },
+      "3_Customer_Experience": {
+        "Rating": "Low",
+        "Reason": "The customer had the worst possible experience; their call was completely ignored. This leads to frustration and a negative brand perception."
+      },
+      "4_Funnel_Analysis": {
+        "Stage": "Awareness",
+        "Reason": "The customer found the store via Google (GMB) and was attempting to make their first contact. The unanswered call prevented them from moving to the consideration stage.",
+        "Timeline_to_Purchase": "Unknown (unclear)",
+        "Timeline_to_Purchase_Reasons": [
+          "The call was not answered, making it impossible to gauge the customer's purchasing timeline."
+        ]
+      },
+      "5_Product_Intelligence": {
+        "Narrow_Down_Stage": "NA",
+        "Product_of_Interest": "NA",
+        "Approx_Order_Value": "NA"
+      },
+      "6_Customer_Needs": {
+        "Description": "NA - The call was not answered, so customer needs could not be explored."
+      },
+      "7_Purchase_Barrier": "Store Unresponsiveness",
+      "8_Decision_Maker": "Unknown",
+      "9_Invitations": {
+        "Store_Visit": {
+          "Rating": "Low",
+          "Reason": "The agent never answered the call to provide an invitation."
+        },
+        "Video_Demo": {
+          "Rating": "Low",
+          "Reason": "The agent never answered the call to offer a video demo."
+        }
+      },
+      "10_Conversion_Hooks": {
+        "Offers_Discounts_EMI": {
+          "Status": "No",
+          "Comment": "No conversation occurred."
+        },
+        "Product_Brochure": {
+          "Status": "No",
+          "Comment": "No conversation occurred."
+        },
+        "Mattress_Measurement": {
+          "Status": "No",
+          "Comment": "No conversation occurred."
+        },
+        "Brand_Legacy_Warranty": {
+          "Status": "No",
+          "Comment": "No conversation occurred."
+        },
+        "Sleep_Trial": {
+          "Status": "No",
+          "Comment": "No conversation occurred."
+        }
+      },
+      "11_RELAX_Framework": {
+        "R_Reach_Out": {
+          "Score": "L",
+          "Reason": "The agent failed to reach out by not answering the call."
+        },
+        "E_Explore_Needs": {
+          "Score": "L",
+          "Reason": "No needs were explored as the call was unanswered."
+        },
+        "L_Link_Product": {
+          "Score": "L",
+          "Reason": "No product was linked as no conversation took place."
+        },
+        "A_Add_Value": {
+          "Score": "L",
+          "Reason": "No value was added as the call was unanswered."
+        },
+        "X_Express_Closing": {
+          "Score": "L",
+          "Reason": "No closing was attempted as the call was missed."
+        }
+      },
+      "12_Agent_Evaluation": {
+        "Main_Skills": {
+          "Product_Knowledge": "Low",
+          "Product_Knowledge_Reason": "Cannot be assessed as the agent did not speak.",
+          "Sales_Skills": "Low",
+          "Sales_Skills_Reason": "The agent demonstrated a complete lack of sales skills by failing to answer an inbound lead call, resulting in a lost opportunity.",
+          "Upsell_Revenue_Skills": "Low",
+          "Upsell_Revenue_Skills_Reason": "Cannot be assessed as the agent did not speak."
+        },
+        "Secondary_Traits": {
+          "Need_Discovery": "Low",
+          "Need_Discovery_Reason": "No opportunity for need discovery as the call was missed.",
+          "Objection_Handling": "Low",
+          "Objection_Handling_Reason": "No opportunity for objection handling as the call was missed.",
+          "Agent_Nature": "Passive",
+          "Agent_Nature_Reason": "The agent was completely unresponsive and failed to perform the basic task of answering a customer's call."
+        }
+      },
+      "13_Agent_Learnings": [
+        "CRITICAL: Every inbound call is a potential sale and must be answered promptly.",
+        "Failure to answer a call from a GMB lead directly wastes marketing spend and results in lost revenue.",
+        "Implement a missed call alert system or a call-back protocol to salvage lost leads."
+      ],
+      "14_Next_Actions": "Immediate follow-up with the store manager to investigate why this call was missed and reinforce the importance of answering all inbound calls.",
+      "15_End_to_End_NPS": {
+        "Score": 0,
+        "Comment": "The customer's attempt to engage with the brand was completely ignored. This creates a strong detractor and a very negative customer experience."
+      },
+      "Transcript_Log": "[System](0:01-0:17): Phone ringing tone. The call is not answered."
+    },
+    "flattened_data": {
+      "MetaData_Customer_Name": "Unknown",
+      "MetaData_Customer_Location": "Unknown",
+      "MetaData_Call_Region": "South",
+      "MetaData_Agent_Name": "NA",
+      "MetaData_Customer_Language": "NA",
+      "MetaData_Customer_Gender": "Unknown",
+      "MetaData_Customer_Age_Group": "Unknown",
+      "MetaData_Consideration_Value": "NA",
+      "MetaData_Call_Quality_Overall": "High",
+      "MetaData_Call_Duration": "18",
+      "MetaData_Connected_to_Customer": false,
+      "MetaData_Customer_Enthusiasm": "Low",
+      "Call_Summary": "This was a missed opportunity. The call was never answered by the store agent. The phone rang for the entire duration of the 18-second call, and the customer eventually disconnected. No conversation took place, resulting in a lost lead.",
+      "1_Call_Objective_Type": "Sales Call",
+      "1_Call_Objective_Objective_Phrase": "Unanswered Call",
+      "2_Intent_to_Purchase_Rating": "Unknown",
+      "2_Intent_to_Purchase_Reason": "The call was not answered, so the customer's intent could not be determined.",
+      "2A_Intent_to_Visit_Rating": "Low",
+      "2A_Intent_to_Visit_Reason": "A customer's intent to visit drops significantly when their initial attempt to contact the store is ignored. The lack of response creates a major barrier.",
+      "3_Customer_Experience_Rating": "Low",
+      "3_Customer_Experience_Reason": "The customer had the worst possible experience; their call was completely ignored. This leads to frustration and a negative brand perception.",
+      "4_Funnel_Analysis_Stage": "Awareness",
+      "4_Funnel_Analysis_Reason": "The customer found the store via Google (GMB) and was attempting to make their first contact. The unanswered call prevented them from moving to the consideration stage.",
+      "4_Funnel_Analysis_Timeline_to_Purchase": "Unknown (unclear)",
+      "4_Funnel_Analysis_Timeline_to_Purchase_Reasons_1": "The call was not answered, making it impossible to gauge the customer's purchasing timeline.",
+      "4_Funnel_Analysis_Timeline_to_Purchase_Reasons_count": 1,
+      "5_Product_Intelligence_Narrow_Down_Stage": "NA",
+      "5_Product_Intelligence_Product_of_Interest": "NA",
+      "5_Product_Intelligence_Approx_Order_Value": "NA",
+      "6_Customer_Needs_Description": "NA - The call was not answered, so customer needs could not be explored.",
+      "7_Purchase_Barrier": "Store Unresponsiveness",
+      "8_Decision_Maker": "Unknown",
+      "9_Invitations_Store_Visit_Rating": "Low",
+      "9_Invitations_Store_Visit_Reason": "The agent never answered the call to provide an invitation.",
+      "9_Invitations_Video_Demo_Rating": "Low",
+      "9_Invitations_Video_Demo_Reason": "The agent never answered the call to offer a video demo.",
+      "10_Conversion_Hooks_Offers_Discounts_EMI_Status": "No",
+      "10_Conversion_Hooks_Offers_Discounts_EMI_Comment": "No conversation occurred.",
+      "10_Conversion_Hooks_Product_Brochure_Status": "No",
+      "10_Conversion_Hooks_Product_Brochure_Comment": "No conversation occurred.",
+      "10_Conversion_Hooks_Mattress_Measurement_Status": "No",
+      "10_Conversion_Hooks_Mattress_Measurement_Comment": "No conversation occurred.",
+      "10_Conversion_Hooks_Brand_Legacy_Warranty_Status": "No",
+      "10_Conversion_Hooks_Brand_Legacy_Warranty_Comment": "No conversation occurred.",
+      "10_Conversion_Hooks_Sleep_Trial_Status": "No",
+      "10_Conversion_Hooks_Sleep_Trial_Comment": "No conversation occurred.",
+      "11_RELAX_Framework_R_Reach_Out_Score": "L",
+      "11_RELAX_Framework_R_Reach_Out_Reason": "The agent failed to reach out by not answering the call.",
+      "11_RELAX_Framework_E_Explore_Needs_Score": "L",
+      "11_RELAX_Framework_E_Explore_Needs_Reason": "No needs were explored as the call was unanswered.",
+      "11_RELAX_Framework_L_Link_Product_Score": "L",
+      "11_RELAX_Framework_L_Link_Product_Reason": "No product was linked as no conversation took place.",
+      "11_RELAX_Framework_A_Add_Value_Score": "L",
+      "11_RELAX_Framework_A_Add_Value_Reason": "No value was added as the call was unanswered.",
+      "11_RELAX_Framework_X_Express_Closing_Score": "L",
+      "11_RELAX_Framework_X_Express_Closing_Reason": "No closing was attempted as the call was missed.",
+      "12_Agent_Evaluation_Main_Skills_Product_Knowledge": "Low",
+      "12_Agent_Evaluation_Main_Skills_Product_Knowledge_Reason": "Cannot be assessed as the agent did not speak.",
+      "12_Agent_Evaluation_Main_Skills_Sales_Skills": "Low",
+      "12_Agent_Evaluation_Main_Skills_Sales_Skills_Reason": "The agent demonstrated a complete lack of sales skills by failing to answer an inbound lead call, resulting in a lost opportunity.",
+      "12_Agent_Evaluation_Main_Skills_Upsell_Revenue_Skills": "Low",
+      "12_Agent_Evaluation_Main_Skills_Upsell_Revenue_Skills_Reason": "Cannot be assessed as the agent did not speak.",
+      "12_Agent_Evaluation_Secondary_Traits_Need_Discovery": "Low",
+      "12_Agent_Evaluation_Secondary_Traits_Need_Discovery_Reason": "No opportunity for need discovery as the call was missed.",
+      "12_Agent_Evaluation_Secondary_Traits_Objection_Handling": "Low",
+      "12_Agent_Evaluation_Secondary_Traits_Objection_Handling_Reason": "No opportunity for objection handling as the call was missed.",
+      "12_Agent_Evaluation_Secondary_Traits_Agent_Nature": "Passive",
+      "12_Agent_Evaluation_Secondary_Traits_Agent_Nature_Reason": "The agent was completely unresponsive and failed to perform the basic task of answering a customer's call.",
+      "13_Agent_Learnings_1": "CRITICAL: Every inbound call is a potential sale and must be answered promptly.",
+      "13_Agent_Learnings_2": "Failure to answer a call from a GMB lead directly wastes marketing spend and results in lost revenue.",
+      "13_Agent_Learnings_3": "Implement a missed call alert system or a call-back protocol to salvage lost leads.",
+      "13_Agent_Learnings_count": 3,
+      "14_Next_Actions": "Immediate follow-up with the store manager to investigate why this call was missed and reinforce the importance of answering all inbound calls.",
+      "15_End_to_End_NPS_Score": 0,
+      "15_End_to_End_NPS_Comment": "The customer's attempt to engage with the brand was completely ignored. This creates a strong detractor and a very negative customer experience.",
+      "Transcript_Log_count": 0
+    },
+    "upload_timestamp": "2026-02-06T16:49:37.163912"
+  }
+]
