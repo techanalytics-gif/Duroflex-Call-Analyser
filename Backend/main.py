@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi import FastAPI, HTTPException, UploadFile, File, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional, Dict
@@ -28,6 +28,7 @@ from outbound_call_service import load_outbound_reports, get_outbound_report_by_
 from outbound_processor import OutboundCallUploadProcessor
 from abc_processor import AbcCallProcessor
 from abc_service import load_abc_reports, get_abc_report_by_id, get_abc_stats, save_abc_call_to_mongodb, save_abc_discarded_call
+import job_tracker
 
 
 
@@ -265,66 +266,160 @@ async def analyze_video_report(report_id: str):
 
 # ===== VIDEO CSV UPLOAD ENDPOINT =====
 
-@app.post("/api/video-reports/upload")
-async def upload_video_csv(file: UploadFile = File(...)):
-    """Upload a CSV of video calls and store analyses in MongoDB."""
+
+def _run_video_upload_in_background(csv_bytes: bytes, filename: str, persistent_job_id: str):
+    """Background task: process video CSV and save each result to MongoDB immediately."""
+    import tempfile, os
+    temp_path = None
     try:
-        if not file.filename.endswith('.csv'):
-            raise HTTPException(status_code=400, detail="File must be a CSV file")
+        with tempfile.NamedTemporaryFile(mode='wb', suffix='.csv', delete=False) as f:
+            f.write(csv_bytes)
+            temp_path = f.name
 
-        temp_path = None
-        try:
-            content = await file.read()
-
-            with tempfile.NamedTemporaryFile(mode='wb', suffix='.csv', delete=False) as temp_file:
-                temp_file.write(content)
-                temp_path = temp_file.name
-
-            processor = VideoUploadProcessor()
-
+        processor = VideoUploadProcessor(
+            save_callback=lambda rid, analysis, metadata: save_video_analysis(
+                report_id=rid, analysis_data=sanitize_nan(analysis), metadata=metadata
+            )
+        )
+        processor.process_csv_file(
+            csv_file_path=temp_path,
+            rate_limit_delay=1.0,
+            persistent_job_id=persistent_job_id,
+        )
+        job_tracker.complete_job(persistent_job_id)
+        print(f"[BG] Video upload job {persistent_job_id} completed.")
+    except Exception as exc:
+        job_tracker.fail_job(persistent_job_id, str(exc))
+        print(f"[BG] Video upload job {persistent_job_id} failed: {exc}")
+    finally:
+        if temp_path and os.path.exists(temp_path):
             try:
-                job_id = processor.process_csv_file(csv_file_path=temp_path, rate_limit_delay=1.0)
-            except ValueError as ve:
-                raise HTTPException(status_code=400, detail=str(ve))
+                os.remove(temp_path)
+            except:
+                pass
 
-            processed_videos = [sanitize_nan(v) for v in processor.get_processed_videos()]
 
-            for video in processed_videos:
-                metadata = video.get("metadata")
-                save_video_analysis(
-                    report_id=video.get("report_id"),
-                    analysis_data=video.get("analysis", {}),
-                    metadata=metadata,
-                )
+@app.post("/api/video-reports/upload")
+async def upload_video_csv(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
+    """Upload a CSV of video calls. Returns job_id immediately; processing runs in the background."""
+    if not file.filename.endswith('.csv'):
+        raise HTTPException(status_code=400, detail="File must be a CSV file")
 
-            job_status = processor.get_job_status(job_id)
-
-            response = {
-                "status": "processing_complete",
-                "job_id": job_id,
-                "filename": file.filename,
-                "total_records": job_status.get('total_records'),
-                "processed": job_status.get('processed'),
-                "successful": job_status.get('successful'),
-                "failed": job_status.get('failed'),
-                "errors": job_status.get('errors')[:10] if isinstance(job_status.get('errors'), list) else job_status.get('errors')
-            }
-
-            return sanitize_nan(response)
-        finally:
-            if temp_path and os.path.exists(temp_path):
-                try:
-                    os.remove(temp_path)
-                except:
-                    pass
+    try:
+        csv_bytes = await file.read()
+        # Quick structure validation before accepting
+        import io
+        import pandas as pd
+        from video_upload_service import VideoCSVValidator
+        df = pd.read_csv(io.BytesIO(csv_bytes))
+        df = VideoCSVValidator.normalize_columns(df)
+        is_valid, err = VideoCSVValidator.validate(df)
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=err)
+        total_records = len(df)
     except HTTPException:
         raise
     except Exception as e:
-        print(f"[API] Video upload error: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Invalid CSV: {str(e)}")
+
+    persistent_job_id = job_tracker.create_job(
+        job_type="video",
+        filename=file.filename,
+        total_records=total_records,
+    )
+
+    background_tasks.add_task(_run_video_upload_in_background, csv_bytes, file.filename, persistent_job_id)
+
+    return sanitize_nan({
+        "status": "accepted",
+        "message": f"Processing {total_records} videos in the background.",
+        "job_id": persistent_job_id,
+        "total_records": total_records,
+        "poll_url": f"/api/upload-status/{persistent_job_id}",
+    })
+
+
+# ===== CSV AUDIO CALL UPLOAD ENDPOINTS =====
+
+
+def _run_gmb_upload_in_background(csv_bytes: bytes, filename: str, persistent_job_id: str, api_key: str):
+    """Background task: process GMB audio CSV and save each result to MongoDB immediately."""
+    import tempfile, os
+    temp_path = None
+    try:
+        with tempfile.NamedTemporaryFile(mode='wb', suffix='.csv', delete=False) as f:
+            f.write(csv_bytes)
+            temp_path = f.name
+
+        def _save_gmb(call_record):
+            save_call_to_mongodb(sanitize_nan(call_record))
+
+        processor = CallUploadProcessor(api_key=api_key, save_callback=_save_gmb)
+        processor.process_csv_file(
+            csv_file_path=temp_path,
+            rate_limit_delay=15.0,
+            persistent_job_id=persistent_job_id,
+        )
+        job_tracker.complete_job(persistent_job_id)
+        print(f"[BG] GMB upload job {persistent_job_id} completed.")
+    except Exception as exc:
+        job_tracker.fail_job(persistent_job_id, str(exc))
+        print(f"[BG] GMB upload job {persistent_job_id} failed: {exc}")
+    finally:
+        if temp_path and os.path.exists(temp_path):
+            try:
+                os.remove(temp_path)
+            except:
+                pass
+
+
+@app.post("/api/GmbCalls/upload")
+async def upload_audio_csv(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
+    """
+    Upload a CSV file with audio call recordings for processing.
+    Returns job_id immediately; processing runs in the background.
+    """
+    if not file.filename.endswith('.csv'):
+        raise HTTPException(status_code=400, detail="File must be a CSV file")
+
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="GEMINI_API_KEY not configured")
+
+    try:
+        csv_bytes = await file.read()
+        # Quick structure validation
+        import io, pandas as pd
+        from GmbCall_processor import CSVValidator
+        df = pd.read_csv(io.BytesIO(csv_bytes))
+        is_valid, err = CSVValidator.validate(df)
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=err)
+        total_records = len(df)
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid CSV: {str(e)}")
+
+    persistent_job_id = job_tracker.create_job(
+        job_type="gmb_audio",
+        filename=file.filename,
+        total_records=total_records,
+    )
+
+    background_tasks.add_task(_run_gmb_upload_in_background, csv_bytes, file.filename, persistent_job_id, api_key)
+
+    return sanitize_nan({
+        "status": "accepted",
+        "message": f"Processing {total_records} audio calls in the background.",
+        "job_id": persistent_job_id,
+        "total_records": total_records,
+        "poll_url": f"/api/upload-status/{persistent_job_id}",
+    })
 
 
 # ===== CSV CALL ANALYSIS ENDPOINTS =====
+
 
 @app.get("/api/GmbCalls")
 async def get_all_call_reports():
@@ -340,7 +435,6 @@ async def get_all_call_reports():
         return sanitize_nan(response)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @app.get("/api/GmbCalls/{call_id}")
 async def get_call_report(call_id: str):
@@ -375,115 +469,15 @@ async def get_call_reports_stats():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# ===== UNIVERSAL UPLOAD STATUS ENDPOINT =====
 
-# ===== CSV AUDIO CALL UPLOAD ENDPOINTS =====
-
-@app.post("/api/GmbCalls/upload")
-async def upload_audio_csv(file: UploadFile = File(...)):
-    """
-    Upload a CSV file with audio call recordings for processing.
-    
-    CSV must contain columns:
-    - Store Name
-    - Locality
-    - City
-    - State
-    - Region
-    - Recording URL
-    - Duration
-    - Date
-    
-    Processing is done asynchronously and can be tracked with job_id.
-    """
-    try:
-        # Validate file type
-        if not file.filename.endswith('.csv'):
-            raise HTTPException(status_code=400, detail="File must be a CSV file")
-
-        # Save temporarily
-        temp_path = None
-        try:
-            # Read file content
-            content = await file.read()
-            
-            # Save to temp file
-            with tempfile.NamedTemporaryFile(mode='wb', suffix='.csv', delete=False) as temp_file:
-                temp_file.write(content)
-                temp_path = temp_file.name
-
-            # Initialize processor
-            api_key = os.getenv("GEMINI_API_KEY")
-            if not api_key:
-                raise HTTPException(status_code=500, detail="GEMINI_API_KEY not configured")
-
-            processor = CallUploadProcessor(api_key=api_key)
-
-            # Start processing (returns job_id immediately)
-            job_id = processor.process_csv_file(csv_file_path=temp_path, rate_limit_delay=15.0)
-
-            # Save processed calls to MongoDB and JSON backup
-            processed_calls = processor.get_processed_calls()
-            # Ensure processed calls are clean before persistence
-            processed_calls = [sanitize_nan(call) for call in processed_calls]
-
-            if processed_calls:
-                # Save to MongoDB
-                for call in processed_calls:
-                    save_call_to_mongodb(call)
-                
-                # Also save to JSON backup
-                save_calls_to_json(processed_calls)
-                
-                print(f"[API] Saved {len(processed_calls)} calls to storage")
-
-            # Get job status
-            job_status = processor.get_job_status(job_id)
-
-            response = {
-                "status": "processing_complete",
-                "job_id": job_id,
-                "filename": file.filename,
-                "total_records": job_status.get('total_records'),
-                "processed": job_status.get('processed'),
-                "successful": job_status.get('successful'),
-                "failed": job_status.get('failed'),
-                "errors": job_status.get('errors')[:10]  # Return first 10 errors
-            }
-
-            # Sanitize any NaN values before returning to avoid JSON errors
-            return sanitize_nan(response)
-
-        finally:
-            # Cleanup temp file
-            if temp_path and os.path.exists(temp_path):
-                try:
-                    os.remove(temp_path)
-                except:
-                    pass
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        print(f"[API] Upload error: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
-
-
-@app.get("/api/GmbCalls/upload-status/{job_id}")
+@app.get("/api/upload-status/{job_id}")
 async def get_upload_status(job_id: str):
-    """
-    Get the processing status of an uploaded CSV file.
-    
-    Returns job status including total, processed, successful, and failed counts.
-    """
-    try:
-        # This is a simplified version - in production you'd store job state in Redis/MongoDB
-        return {
-            "status": "success",
-            "message": "Job status tracking requires job persistence. Calls are saved to MongoDB after upload.",
-            "note": "Query /api/GmbCalls to see all available calls"
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    """Get real-time processing status for any upload job."""
+    status = job_tracker.get_job_status(job_id)
+    if status is None:
+        raise HTTPException(status_code=404, detail=f"Job {job_id} not found")
+    return sanitize_nan(status)
 
 
 @app.post("/api/GmbCalls/{call_id}/retry-drive-sync")
@@ -643,99 +637,80 @@ async def get_outbound_calls_stats():
         raise HTTPException(status_code=500, detail=str(e))
 
 
+def _run_outbound_upload_in_background(csv_bytes: bytes, filename: str, persistent_job_id: str):
+    """Background task: process outbound CSV; persists each result to MongoDB immediately."""
+    import tempfile, os
+    temp_path = None
+    try:
+        with tempfile.NamedTemporaryFile(mode='wb', suffix='.csv', delete=False) as f:
+            f.write(csv_bytes)
+            temp_path = f.name
+
+        processor = OutboundCallUploadProcessor()
+        processor.process_csv_file(
+            csv_file_path=temp_path,
+            rate_limit_delay=1.0,
+            persistent_job_id=persistent_job_id,
+        )
+
+        # Save results to MongoDB (processor already saves discarded calls inside _process_single_row)
+        for call_data in processor.get_processed_calls():
+            save_outbound_call_to_mongodb(call_data)
+        for call_data in processor.get_discarded_calls():
+            save_discarded_call(call_data)
+
+        job_tracker.complete_job(persistent_job_id)
+        print(f"[BG] Outbound upload job {persistent_job_id} completed.")
+    except Exception as exc:
+        job_tracker.fail_job(persistent_job_id, str(exc))
+        print(f"[BG] Outbound upload job {persistent_job_id} failed: {exc}")
+    finally:
+        if temp_path and os.path.exists(temp_path):
+            try:
+                os.remove(temp_path)
+            except:
+                pass
+
+
 @app.post("/api/outbound-calls/upload")
-async def upload_outbound_csv(file: UploadFile = File(...)):
+async def upload_outbound_csv(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
     """
     Upload a CSV file with outbound call recordings for processing.
-    
-    Processing pipeline:
-    1. Validate CSV structure
-    2. Download audio from recording URLs
-    3. Classify call as PRE-PURCHASE or POST-PURCHASE (using first 20 seconds)
-    4. For PRE-PURCHASE: Full analysis with Gemini 2.0 Flash
-    5. For POST-PURCHASE: Store in separate discarded_calls collection
-    6. Save to MongoDB
-    
-    CSV Requirements:
-    - Store_Name
-    - Recording_URL
-    - Duration
-    - Customer_Name
-    - Customer_Phone
-    - Store_Visit_Date
-    - Products_Shown
-    - Estimated_Deal_Value
-    - Call_Date
-    - Locality
-    - City
-    - State
-    - Region
+    Returns job_id immediately; processing runs in the background.
     """
+    if not file.filename.endswith('.csv'):
+        raise HTTPException(status_code=400, detail="File must be a CSV file")
+
     try:
-        if not file.filename.endswith('.csv'):
-            raise HTTPException(status_code=400, detail="File must be a CSV file")
-
-        temp_path = None
-        try:
-            content = await file.read()
-
-            with tempfile.NamedTemporaryFile(mode='wb', suffix='.csv', delete=False) as temp_file:
-                temp_file.write(content)
-                temp_path = temp_file.name
-
-            try:
-                processor = OutboundCallUploadProcessor()
-                job_id = processor.process_csv_file(csv_file_path=temp_path, rate_limit_delay=1.0)
-            except ValueError as ve:
-                raise HTTPException(status_code=400, detail=str(ve))
-
-            # Save processed pre-purchase calls
-            processed_calls = processor.get_processed_calls()
-            print(f"[API] Saving {len(processed_calls)} successfully processed calls to MongoDB...")
-            for call_data in processed_calls:
-                result = save_outbound_call_to_mongodb(call_data)
-                if not result:
-                    print(f"[API] Failed to save {call_data.get('call_id')}")
-
-            # Save discarded post-purchase calls
-            discarded_calls = processor.get_discarded_calls()
-            print(f"[API] Saving {len(discarded_calls)} discarded calls to MongoDB...")
-            for call_data in discarded_calls:
-                save_discarded_call(call_data)
-
-            job_status = processor.get_job_status(job_id)
-            
-            # Print errors for debugging
-            if job_status.get('errors'):
-                print(f"[API] Processing errors ({len(job_status['errors'])}):")
-                for err in job_status['errors'][:5]:  # Print first 5
-                    print(f"  Row {err.get('row')}: {err.get('error')}")
-
-            response = {
-                "status": "processing_complete",
-                "job_id": job_id,
-                "filename": file.filename,
-                "total_records": job_status.get('total_records'),
-                "processed": job_status.get('processed'),
-                "successful": job_status.get('successful'),
-                "failed": job_status.get('failed'),
-                "filtered_out": job_status.get('filtered_out'),
-                "message": f"Processed {job_status.get('successful')} pre-purchase calls, filtered out {job_status.get('filtered_out')} post-purchase calls",
-                "errors": job_status.get('errors')[:10] if isinstance(job_status.get('errors'), list) else job_status.get('errors')
-            }
-
-            return sanitize_nan(response)
-        finally:
-            if temp_path and os.path.exists(temp_path):
-                try:
-                    os.remove(temp_path)
-                except:
-                    pass
+        csv_bytes = await file.read()
+        import io, pandas as pd
+        from outbound_processor import OutboundCSVValidator
+        df = pd.read_csv(io.BytesIO(csv_bytes))
+        df.columns = df.columns.str.strip()
+        is_valid, err = OutboundCSVValidator.validate(df)
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=err)
+        total_records = len(df)
     except HTTPException:
         raise
     except Exception as e:
-        print(f"[API] Outbound call upload error: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Invalid CSV: {str(e)}")
+
+    persistent_job_id = job_tracker.create_job(
+        job_type="outbound",
+        filename=file.filename,
+        total_records=total_records,
+    )
+
+    background_tasks.add_task(_run_outbound_upload_in_background, csv_bytes, file.filename, persistent_job_id)
+
+    return sanitize_nan({
+        "status": "accepted",
+        "message": f"Processing {total_records} outbound calls in the background.",
+        "job_id": persistent_job_id,
+        "total_records": total_records,
+        "poll_url": f"/api/upload-status/{persistent_job_id}",
+    })
 
 
 # ===== ABC CART RECOVERY CALLS ENDPOINTS =====
@@ -787,66 +762,72 @@ async def get_abc_calls_stats():
         raise HTTPException(status_code=500, detail=str(e))
 
 
+def _run_abc_upload_in_background(csv_bytes: bytes, filename: str, persistent_job_id: str):
+    """Background task: process ABC cart recovery CSV; persists each result to MongoDB immediately."""
+    import tempfile, os
+    temp_path = None
+    try:
+        with tempfile.NamedTemporaryFile(mode='wb', suffix='.csv', delete=False) as f:
+            f.write(csv_bytes)
+            temp_path = f.name
+
+        processor = AbcCallProcessor()
+        processor.process_csv_file(csv_file_path=temp_path, rate_limit_delay=1.0, persistent_job_id=persistent_job_id)
+        # abc_processor calls save_abc_call_to_mongodb / save_abc_discarded_call internally per-row
+
+        job_tracker.complete_job(persistent_job_id)
+        print(f"[BG] ABC upload job {persistent_job_id} completed.")
+    except Exception as exc:
+        job_tracker.fail_job(persistent_job_id, str(exc))
+        print(f"[BG] ABC upload job {persistent_job_id} failed: {exc}")
+    finally:
+        if temp_path and os.path.exists(temp_path):
+            try:
+                os.remove(temp_path)
+            except:
+                pass
+
+
 @app.post("/api/abc-calls/upload")
-async def upload_abc_csv(file: UploadFile = File(...)):
+async def upload_abc_csv(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
     """
     Upload a CSV file with ABC Cart Recovery call recordings for processing.
+    Returns job_id immediately; processing runs in the background.
     """
+    if not file.filename.endswith('.csv'):
+        raise HTTPException(status_code=400, detail="File must be a CSV file")
+
     try:
-        if not file.filename.endswith('.csv'):
-            raise HTTPException(status_code=400, detail="File must be a CSV file")
-
-        temp_path = None
-        try:
-            content = await file.read()
-
-            with tempfile.NamedTemporaryFile(mode='wb', suffix='.csv', delete=False) as temp_file:
-                temp_file.write(content)
-                temp_path = temp_file.name
-
-            try:
-                processor = AbcCallProcessor()
-                job_id = processor.process_csv_file(csv_file_path=temp_path, rate_limit_delay=1.0)
-            except ValueError as ve:
-                raise HTTPException(status_code=400, detail=str(ve))
-
-            # Save processed pre-purchase calls
-            processed_calls = processor.processed_calls
-            for call_data in processed_calls:
-                save_abc_call_to_mongodb(call_data)
-
-            # Save discarded post-purchase calls
-            discarded_calls = processor.discarded_calls
-            for call_data in discarded_calls:
-                save_abc_discarded_call(call_data)
-
-            job_status = processor.get_job_status(job_id)
-
-            response = {
-                "status": "processing_complete",
-                "job_id": job_id,
-                "filename": file.filename,
-                "total_records": job_status.get('total_records'),
-                "processed": job_status.get('processed'),
-                "successful": job_status.get('successful'),
-                "failed": job_status.get('failed'),
-                "filtered_out": job_status.get('filtered_out'),
-                "message": f"Processed {job_status.get('successful')} cart recovery calls, filtered out {job_status.get('filtered_out')} post-purchase calls",
-                "errors": job_status.get('errors')[:10] if isinstance(job_status.get('errors'), list) else job_status.get('errors')
-            }
-
-            return sanitize_nan(response)
-        finally:
-            if temp_path and os.path.exists(temp_path):
-                try:
-                    os.remove(temp_path)
-                except:
-                    pass
+        csv_bytes = await file.read()
+        import io, pandas as pd
+        from abc_processor import AbcCSVValidator
+        df = pd.read_csv(io.BytesIO(csv_bytes))
+        df.columns = df.columns.str.strip()
+        is_valid, err = AbcCSVValidator.validate(df)
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=err)
+        total_records = len(df)
     except HTTPException:
         raise
     except Exception as e:
-        print(f"[API] ABC call upload error: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Invalid CSV: {str(e)}")
+
+    persistent_job_id = job_tracker.create_job(
+        job_type="abc",
+        filename=file.filename,
+        total_records=total_records,
+    )
+
+    background_tasks.add_task(_run_abc_upload_in_background, csv_bytes, file.filename, persistent_job_id)
+
+    return sanitize_nan({
+        "status": "accepted",
+        "message": f"Processing {total_records} cart recovery calls in the background.",
+        "job_id": persistent_job_id,
+        "total_records": total_records,
+        "poll_url": f"/api/upload-status/{persistent_job_id}",
+    })
+
 
 if __name__ == "__main__":
     print("Starting Duroflex Video Analysis API...")

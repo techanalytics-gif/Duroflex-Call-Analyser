@@ -1,6 +1,7 @@
 """
 Video Upload Processing Service
 Handles CSV upload -> Gemini video analysis -> MongoDB storage
+Saves each video result incrementally to avoid data loss on timeout.
 """
 
 import uuid
@@ -14,6 +15,7 @@ from typing import Dict, Any, Optional, Tuple, List
 import pandas as pd
 
 from video_analysis_service import analyze_video_with_gemini, save_video_analysis
+from job_tracker import update_job_progress
 
 
 def sanitize_nan(obj):
@@ -152,7 +154,16 @@ class VideoProcessingJob:
 class VideoUploadProcessor:
     """Main orchestrator for video CSV uploads."""
 
-    def __init__(self):
+    def __init__(self, save_callback=None):
+        """
+        Initialize the processor.
+
+        Args:
+            save_callback: Optional callable(report_id, analysis, metadata) that
+                           persists each video result immediately to MongoDB.
+                           When provided, results are NOT accumulated in memory.
+        """
+        self.save_callback = save_callback
         self.jobs: Dict[str, VideoProcessingJob] = {}
         self.processed_videos: List[Dict[str, Any]] = []
 
@@ -214,10 +225,24 @@ class VideoUploadProcessor:
         }
 
         job.mark_success()
+
+        # --- Incremental persistence ---
+        if self.save_callback:
+            try:
+                self.save_callback(report_id, analysis, metadata)
+            except Exception as cb_err:
+                print(f"[VIDEO] Warning: save_callback failed for row {row_num}: {cb_err}")
+
         return sanitize_nan(video_record)
 
-    def process_csv_file(self, csv_file_path: str, rate_limit_delay: float = 1.0) -> str:
-        """Validate and process an uploaded CSV file."""
+    def process_csv_file(self, csv_file_path: str, rate_limit_delay: float = 1.0, persistent_job_id: Optional[str] = None) -> str:
+        """Validate and process an uploaded CSV file.
+
+        Args:
+            csv_file_path: Path to the temporary CSV file.
+            rate_limit_delay: Seconds to sleep between rows.
+            persistent_job_id: When provided, progress is reported to job_tracker.
+        """
         df = pd.read_csv(csv_file_path)
         df = VideoCSVValidator.normalize_columns(df)
         is_valid, error = VideoCSVValidator.validate(df)
@@ -233,7 +258,17 @@ class VideoUploadProcessor:
         for idx, row in df.iterrows():
             record = self.process_single_video(idx + 1, row.to_dict(), job)
             if record:
-                self.processed_videos.append(record)
+                if not self.save_callback:
+                    self.processed_videos.append(record)
+                if persistent_job_id:
+                    update_job_progress(persistent_job_id, successful_delta=1)
+            else:
+                if persistent_job_id:
+                    update_job_progress(
+                        persistent_job_id,
+                        failed_delta=1,
+                        error={"row": idx + 1, "error": "Analysis failed"},
+                    )
 
             if rate_limit_delay:
                 time.sleep(rate_limit_delay)

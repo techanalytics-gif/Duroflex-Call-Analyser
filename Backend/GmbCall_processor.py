@@ -6,6 +6,7 @@ to match the "processor + service" structure used for ABC calls.
 Key behavior:
 - Uses the same prompt text you use in AI Studio.
 - Stores ONLY the raw AI Studio-style schema under `analysis` (no legacy normalization, no `analysis_v2`).
+- Saves each call to MongoDB immediately after analysis (incremental persistence).
 """
 
 import json
@@ -24,6 +25,7 @@ import google.generativeai as genai
 import numpy as np
 import soundfile as sf
 from lameenc import Encoder
+from job_tracker import update_job_progress
 
 
 def sanitize_nan(obj):
@@ -611,11 +613,18 @@ class ProcessingJob:
 class CallUploadProcessor:
     """Main orchestrator for CSV upload processing"""
 
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str, save_callback=None):
         """
         Initialize processor with Gemini API key.
+
+        Args:
+            api_key: Gemini API key
+            save_callback: Optional callable(call_record) that persists each
+                           successfully analysed call immediately. When provided,
+                           the processor no longer accumulates results in memory.
         """
         self.api_key = api_key
+        self.save_callback = save_callback
         self.downloader = AudioDownloader(timeout=60)
         self.analyzer = GeminiAudioAnalyzer(api_key=api_key)
         self.prompt = PromptTemplate.get_audio_call_prompt()
@@ -700,6 +709,14 @@ class CallUploadProcessor:
 
             print(f"[UPLOAD] ✅ Row {row_num} processed successfully")
             job.mark_success()
+
+            # --- Incremental persistence ---
+            if self.save_callback:
+                try:
+                    self.save_callback(call_record)
+                except Exception as cb_err:
+                    print(f"[UPLOAD] Warning: save_callback failed for row {row_num}: {cb_err}")
+
             return call_record, None
 
         except Exception as e:
@@ -710,16 +727,19 @@ class CallUploadProcessor:
     def process_csv_file(
         self,
         csv_file_path: str,
-        rate_limit_delay: float = 10.0
+        rate_limit_delay: float = 10.0,
+        persistent_job_id: Optional[str] = None,
     ) -> str:
         """
         Process entire CSV file.
-        
+
         Args:
             csv_file_path: Path to uploaded CSV file
-            rate_limit_delay: Seconds to wait between API calls (to avoid quota limits)
-        
-        Returns: job_id for tracking progress
+            rate_limit_delay: Seconds to wait between API calls
+            persistent_job_id: When provided, progress is reported to job_tracker
+                               (used by the background-task path in main.py).
+
+        Returns: local ProcessingJob.job_id for backward-compat get_job_status()
         """
         job = ProcessingJob(filename=csv_file_path.split('/')[-1])
         self.jobs[job.job_id] = job
@@ -750,7 +770,20 @@ class CallUploadProcessor:
                 call_record, error = self.process_single_call(row_num, row_data, job)
 
                 if call_record:
-                    self.processed_calls.append(call_record)
+                    # Only accumulate in memory when no callback is present (small jobs / tests)
+                    if not self.save_callback:
+                        self.processed_calls.append(call_record)
+
+                    # Push progress to persistent tracker (background-task path)
+                    if persistent_job_id:
+                        update_job_progress(persistent_job_id, successful_delta=1)
+                else:
+                    if persistent_job_id and error:
+                        update_job_progress(
+                            persistent_job_id,
+                            failed_delta=1,
+                            error={"row": row_num, "error": error},
+                        )
 
                 # Rate limiting to avoid Gemini API quota issues
                 time.sleep(rate_limit_delay)

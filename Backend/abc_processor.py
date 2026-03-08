@@ -15,6 +15,7 @@ import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 from abc_service import save_abc_call_to_mongodb, save_abc_discarded_call
+from job_tracker import update_job_progress
 
 load_dotenv()
 
@@ -181,8 +182,12 @@ class AbcCallProcessor:
             "errors": []
         }
 
-    def process_csv_file(self, csv_file_path: str, rate_limit_delay: float = 2.0) -> str:
-        """Process CSV file with Pre/Post-Purchase filtering."""
+    def process_csv_file(self, csv_file_path: str, rate_limit_delay: float = 2.0, persistent_job_id: str = None) -> str:
+        """Process CSV file with Pre/Post-Purchase filtering.
+
+        Args:
+            persistent_job_id: When provided, progress is reported to job_tracker per-row.
+        """
         try:
             df = pd.read_csv(csv_file_path)
             
@@ -199,14 +204,28 @@ class AbcCallProcessor:
             print(f"[ABC] Starting processing of {len(df)} records. Model used: {MODEL_NAME_FULL}")
 
             for index, row in df.iterrows():
+                # Snapshot counters before processing this row
+                _prev_ok = self.job_status["successful"]
+                _prev_fail = self.job_status["failed"]
+                _prev_filt = self.job_status["filtered_out"]
+
                 try:
                     self._process_single_row(row, index + 2) # +2 for 1-based index including header
-                    time.sleep(rate_limit_delay) 
+                    time.sleep(rate_limit_delay)
                 except Exception as e:
                     print(f"[ABC] Error processing row {index}: {e}")
                     self._add_error(index, "Unknown", str(e))
-                
+
                 self.job_status["processed"] += 1
+
+                # Push incremental progress to the persistent tracker
+                if persistent_job_id:
+                    update_job_progress(
+                        persistent_job_id,
+                        successful_delta=self.job_status["successful"] - _prev_ok,
+                        failed_delta=self.job_status["failed"] - _prev_fail,
+                        filtered_delta=self.job_status["filtered_out"] - _prev_filt,
+                    )
 
             self.job_status["status"] = "completed"
             return self.job_id

@@ -14,6 +14,7 @@ from audio_processor import AudioDownloader, GeminiAudioAnalyzer, PromptTemplate
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
+from job_tracker import update_job_progress
 
 load_dotenv()
 
@@ -195,19 +196,21 @@ class OutboundCallUploadProcessor:
             "errors": []
         }
 
-    def process_csv_file(self, csv_file_path: str, rate_limit_delay: float = 2.0) -> str:
+    def process_csv_file(self, csv_file_path: str, rate_limit_delay: float = 2.0, persistent_job_id: Optional[str] = None) -> str:
         """
         Process CSV file with Pre/Post-Purchase filtering.
-        
+
         Pipeline:
         1. Validate CSV structure
         2. For each row:
            a. Download audio
-           b. Extract first 20 seconds
-           c. Classify as PRE or POST purchase
-           d. If PRE: Full analysis with Gemini
-           e. If POST: Save to discarded_calls collection
+           b. Classify as PRE or POST purchase
+           c. If PRE: Full analysis with Gemini - save to MongoDB immediately
+           d. If POST: Save to discarded_calls collection immediately
         3. Return job_id
+
+        Args:
+            persistent_job_id: When provided, progress is reported to job_tracker.
         """
         try:
             # Read CSV
@@ -299,13 +302,15 @@ class OutboundCallUploadProcessor:
                         "analyzed_at": datetime.now().isoformat()
                     }
                     
-                    # If POST-PURCHASE, save to discarded and continue
+                    # POST-PURCHASE path
                     if call_type == "POST_PURCHASE":
                         print(f"[OUTBOUND] Call is POST_PURCHASE - storing in discarded_calls")
                         base_record["discard_reason"] = "Post-purchase call - customer already bought"
                         self.discarded_calls.append(base_record)
                         self.job_status["filtered_out"] += 1
                         self.job_status["processed"] += 1
+                        if persistent_job_id:
+                            update_job_progress(persistent_job_id, filtered_delta=1)
                         time.sleep(rate_limit_delay)
                         continue
                     
@@ -347,10 +352,19 @@ class OutboundCallUploadProcessor:
                         self.job_status["processed"] += 1
                         
                         print(f"[OUTBOUND] ✓ Row {row_num} processed successfully")
+
+                        if persistent_job_id:
+                            update_job_progress(persistent_job_id, successful_delta=1)
                     except Exception as analysis_exc:
                         error_msg = f"Analysis exception: {str(analysis_exc)}"
                         print(f"[OUTBOUND] ❌ {error_msg}")
                         self._add_error(row_num, store_name, error_msg)
+                        if persistent_job_id:
+                            update_job_progress(
+                                persistent_job_id,
+                                failed_delta=1,
+                                error={"row": row_num, "store": store_name, "error": error_msg},
+                            )
                         continue
                     
                     # Rate limiting
